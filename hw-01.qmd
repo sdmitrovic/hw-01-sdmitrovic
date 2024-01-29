@@ -1,7 +1,7 @@
 ---
 title: "HW 01"
-author: "INSERT YOUR NAME HERE"
-format: 
+author: "Sanja Dmitrovic"
+format:
   html:
     embed-resources: true
 toc: true
@@ -9,19 +9,43 @@ toc: true
 
 ## 0 - Setup
 
-```{r setup
+```{r setup}
 if (!require("pacman")) 
   install.packages("pacman")
 
-# use this line for installing/loading
-#pacman::p_load() 
+if (!require("tidyverse")) 
+  install.packages("viridis")
+  
+if (!require("viridis")) 
+  install.packages("viridis")
 
-devtools::install_github("tidyverse/dsbox")
+#devtools::install_github("tidyverse/dsbox")
+
+# use this line for installing/loading
+pacman::p_load(tidyverse, dsbox, ggplot2, viridis) 
+
 ```
 
 ## 1 - Road traffic accidents in Edinburgh
 
 ```{r label-me-1}
+
+#Categorize days of the week into weekday or weekend.
+accidents$wkend_wkday <- ifelse(accidents$day_of_week %in% c("Saturday", "Sunday"), "weekend", "weekday")
+
+#Recreate plot.
+ggplot(accidents, aes(x = time, fill = severity)) +
+  geom_density(alpha = 0.5) + 
+  scale_fill_viridis(discrete = TRUE) +
+  theme_minimal() + 
+  facet_wrap( ~ wkend_wkday, nrow = 2) +
+  labs(
+  x = "Time of day",
+  y = "Density",
+  fill = "Severity",
+  title = "Number of accidents throughout the day",
+  subtitle = "By day of week and severity"
+  )
 
 ```
 
